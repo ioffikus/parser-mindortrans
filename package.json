@@ -1,4 +1,38 @@
 {
-  "name": "application-name",
-  "version": "0.0.1"
+  "name": "parser-mindortrans",
+  "version": "0.0.1",
+  "description": "parser-mindortrans",
+  "main": "parse",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ioffikus/parser-mindortrans.git"
+  },
+  "keywords": [
+    "parser-mindortrans",
+    "example"
+  ],
+  "author": "ioffikus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ioffikus/parser-mindortrans/issues"
+  },
+  "homepage": "https://github.com/ioffikus/parser-mindortrans#readme",
+
+  "dependencies": {
+    "request": "latest",
+    "q": "latest",
+    "cheerio": "latest",
+    "winston": "latest",
+    "mocha": "latest",
+    "should": "latest",
+    "chai": "latest",
+    "chai-as-promised": "latest",
+    "sinon-chai": "latest",
+    "sinon": "latest",
+    "random-ua": "latest",
+    "fast-csv": "latest"
+  }
 }
