@@ -5,13 +5,21 @@ var Q = require('q'),
     htmlParsers = require('./htmlParsers.js'),
     config = require('./config');
 
+/**
+ * Можно сохранять в файл log.txt или другие варианты
+ * пока выводим в консоль
+ * @param err
+ */
 function logError(err) {
     console.log('Ошибка:', err);
 }
 
+/**
+ * main
+ */
 function parse() {
     // получаем первую страницу, извлекаем из нее данные
-    utils.requestPage({})
+    return utils.requestPage({})
         .then(function(htmlStr) {
             var pages,
                 headers,
@@ -28,7 +36,8 @@ function parse() {
             formData = htmlParsers.parseHiddenFormData(htmlStr);
 
             // строем список страниц
-            pages = utils.createPages(config.PAGE_STR, 2, 10);
+            // т.е. первая уже загружена, нужно получить 9
+            pages = utils.createPages(config.PAGE_STR, 2, 9);
 
             // парсим данные первой страницы
             firstPageData = htmlParsers.parseData(htmlStr);
@@ -40,7 +49,9 @@ function parse() {
                 pagesPromises.push(utils.requestPage(formData));
             }
 
-            Q.allSettled(pagesPromises)
+            // дожидаемся выполнения всех запросв,
+            // сохраняем результат
+            return Q.allSettled(pagesPromises)
                 .then(function(resArr) {
 
                     // добавляем данные в result
@@ -57,17 +68,19 @@ function parse() {
                         }
                     }
 
-                    console.log(result);
-                })
-                .catch(logError);
-        })
-        .catch(logError);
-
-// делаем запросы
-
-// добавляем результаты в данные, логируем ошибки при запросе
-
-// сохраняем массив массивов в csv
+                    // сохраняем в csv
+                    return utils.saveToCSVArrayOfArrays(result);
+                });
+        });
 }
 
-parse();
+// время выполнения
+var start = process.hrtime();
+
+parse()
+    .then(function(str) {
+        console.log(str);
+        console.log("Время работы: ", process.hrtime(start)[0] + "с.");
+        process.exit();
+    })
+    .catch(logError);

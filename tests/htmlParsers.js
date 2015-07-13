@@ -4,8 +4,6 @@ var chai = require('chai'),
     chaiAsPromised = require('chai-as-promised'),
     sinonChai = require('sinon-chai'),
     expect = require('chai').expect,
-    sinon = require('sinon'),
-    Q = require('q'),
 
     firstPagePath = './tests/firstPage.html',
     utils = require('./../utils.js'),

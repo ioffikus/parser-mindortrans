@@ -32,7 +32,6 @@
     "chai-as-promised": "latest",
     "sinon-chai": "latest",
     "sinon": "latest",
-    "random-ua": "latest",
     "fast-csv": "latest"
   }
 }

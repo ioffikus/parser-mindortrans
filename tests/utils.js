@@ -4,13 +4,12 @@ var chai = require('chai'),
     chaiAsPromised = require('chai-as-promised'),
     sinonChai = require('sinon-chai'),
     expect = require('chai').expect,
-    sinon = require('sinon'),
-    Q = require('q'),
+    fs = require('fs'),
     utils = require('./../utils.js'),
-
     firstPagePath = './tests/firstPage.html',
     nullPath = '',
     pageStr = 'ctl01$mainContent$ctl00$carryPermissionsList$RadGrid1$ctl00$ctl03$ctl01$ctl05',
+    testFilePath = './tests/test.csv',
 
     goodArray = [
         'ctl01$mainContent$ctl00$carryPermissionsList$RadGrid1$ctl00$ctl03$ctl01$ctl07',
@@ -55,6 +54,28 @@ describe('Тест utils', function() {
             expect(result[0]).to.eq(goodArray[0]);
             expect(result[1]).to.eq(goodArray[1]);
             expect(result[2]).to.eq(goodArray[2]);
+        });
+    });
+
+    describe('Тест сохранение файла', function() {
+        beforeEach(function(done) {
+            utils.saveToCSVArrayOfArrays([
+                ['test', 'test', 'test'],
+                ['test1', 'test1', 'test1'],
+                ['строка', 'строка', 'строка']
+            ], testFilePath)
+                .then(function() {
+                    done();
+                });
+        });
+
+        it('Файл должен быть создан и равен 71 байтам', function(done) {
+            fs.stat(testFilePath, function(err, stats) {
+                expect(err).to.be.null;
+                expect(stats.isFile()).to.be.true;
+                expect(stats.size).to.be.eq(71);
+                done();
+            });
         });
     });
 });

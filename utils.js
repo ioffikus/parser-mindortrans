@@ -3,6 +3,7 @@
 var fs = require('fs'),
     request = require('request'),
     config = require('./config.js'),
+    csv = require('fast-csv'),
     Q = require('q');
 
 /**
@@ -106,10 +107,32 @@ function createPages(string, step, count) {
     return results;
 }
 
+/**
+ * Сохраняем файл
+ * @param array
+ * @param filePath
+ * @return {*}
+ */
+function saveToCSVArrayOfArrays(array, filePath) {
+    var path = filePath || config.OUT_FILE_NAME,
+        dfd = Q.defer(),
+        ws = fs.createWriteStream(path, {encoding: 'utf8'});
+
+    csv.write(array, {headers: true})
+        .pipe(ws);
+
+    ws.on('finish', function() {
+        dfd.resolve('Файл ' + path + ' создан.');
+    });
+
+    return dfd.promise;
+}
+
 module.exports = {
     loadPageReturnString: loadPageReturnString,
     requestPage: requestPage,
-    createPages: createPages
+    createPages: createPages,
+    saveToCSVArrayOfArrays: saveToCSVArrayOfArrays
 };
 
 
