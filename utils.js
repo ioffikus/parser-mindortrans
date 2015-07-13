@@ -5,6 +5,7 @@ var fs = require('fs'),
     config = require('./config.js'),
     Q = require('q');
 
+
 function loadPageReturnString(path) {
     var dfd = Q.defer();
 
@@ -18,6 +19,7 @@ function loadPageReturnString(path) {
 
     return dfd.promise;
 }
+
 
 function requestPage(formData) {
 
@@ -96,20 +98,6 @@ module.exports = {
     requestPage: requestPage,
     createPages: createPages
 };
-
-requestPage()
-    .then(function(body) {
-        var formData = parseHiddenFormData(body);
-
-        formData['__EVENTTARGET'] = 'ctl01$mainContent$ctl00$carryPermissionsList$RadGrid1$ctl00$ctl03$ctl01$ctl07';
-
-        //console.log(formData);
-
-        requestPage(formData)
-            .then(function(body) {
-                console.log(body);
-            });
-    });
 
 
 

@@ -9,12 +9,12 @@ var chai = require('chai'),
 
     firstPagePath = './tests/firstPage.html',
     utils = require('./../utils.js'),
-    cParsers = require('./../cParsers.js');
+    htmlParsers = require('./../htmlParsers.js');
 
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 
-describe('Тест cParsers', function() {
+describe('Тест htmlParsers', function() {
     describe('Тест разбора скрытых полей', function() {
         var htmlStr,
             formData;
@@ -24,7 +24,7 @@ describe('Тест cParsers', function() {
                 .then(function(results) {
                     htmlStr = results;
 
-                    formData = cParsers.parseHiddenFormData(htmlStr);
+                    formData = htmlParsers.parseHiddenFormData(htmlStr);
 
                     done();
                 });
@@ -40,7 +40,7 @@ describe('Тест cParsers', function() {
     });
 
     describe('Тест разбора скрытых полей, не верный параметр', function() {
-        var formData = cParsers.parseHiddenFormData('');
+        var formData = htmlParsers.parseHiddenFormData('');
 
         it('Проверяем параметр __EVENTTARGET', function() {
             expect(formData['__EVENTTARGET']).to.be.undefined;
@@ -60,7 +60,7 @@ describe('Тест cParsers', function() {
                 .then(function(results) {
                     htmlStr = results;
 
-                    array = cParsers.parseData(htmlStr);
+                    array = htmlParsers.parseData(htmlStr);
 
                     done();
                 });
@@ -79,6 +79,32 @@ describe('Тест cParsers', function() {
         it('Проверяем треий элемент', function() {
             expect(array[2][0]).to.be.eq("3");
             expect(array[2][1]).to.be.eq("000003 (аннулировано 04.12.2013)");
+        });
+    });
+
+    describe('Тест разбора заголовков таблицы', function() {
+        var htmlStr,
+            thArray;
+
+        beforeEach(function(done) {
+            utils.loadPageReturnString(firstPagePath)
+                .then(function(results) {
+                    htmlStr = results;
+
+                    thArray = htmlParsers.parseHeaders(htmlStr);
+
+                    done();
+                });
+        });
+
+        it('Проверяем первый элемент', function() {
+            expect(thArray[0][0]).to.be.eq('№ п/п');
+        });
+
+        it('Проверяем последний элемент', function() {
+            var len = thArray[0].length;
+
+            expect(thArray[0][len-1]).to.be.eq('Приоста новлено');
         });
     });
 });

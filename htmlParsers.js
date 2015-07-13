@@ -63,7 +63,28 @@ function parseData(htmlStr) {
     return result;
 }
 
+function parseHeaders(htmlStr) {
+    var results = [],
+        $;
+
+    $ = cheerio.load(htmlStr);
+
+    var ths = $('table.rgMasterTable').find('th.rgHeader'),
+        thArr = [];
+
+    ths.each(function(i, thElem) {
+        var text = $(thElem).text();
+
+        thArr.push(text);
+    });
+
+    results.push(thArr);
+
+    return results;
+}
+
 module.exports = {
     parseHiddenFormData: parseHiddenFormData,
-    parseData: parseData
+    parseData: parseData,
+    parseHeaders: parseHeaders
 }
