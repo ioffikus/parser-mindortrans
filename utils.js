@@ -5,7 +5,11 @@ var fs = require('fs'),
     config = require('./config.js'),
     Q = require('q');
 
-
+/**
+ * Загружаем страницу (локально)
+ * @param {String}
+ * @return {Promise}
+ **/
 function loadPageReturnString(path) {
     var dfd = Q.defer();
 
@@ -20,7 +24,11 @@ function loadPageReturnString(path) {
     return dfd.promise;
 }
 
-
+/**
+ * Делаем запрос на сервер
+ * @param {Object}
+ * @return {Promise}
+ **/
 function requestPage(formData) {
 
     if(typeof formData === 'undefined' || formData === null) {
@@ -45,8 +53,6 @@ function requestPage(formData) {
         },
         dfd = Q.defer();
 
-    // console.log(options);
-
     request(options, function(error, response, body) {
         if(error) {
             dfd.reject(error);
@@ -58,6 +64,13 @@ function requestPage(formData) {
     return dfd.promise;
 }
 
+/**
+ * Создаем массив страниц, которые нужно получить
+ * @param string
+ * @param step
+ * @param count
+ * @return {Array}
+ */
 function createPages(string, step, count) {
     var results = [];
 

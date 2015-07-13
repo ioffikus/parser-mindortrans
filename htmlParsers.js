@@ -13,7 +13,7 @@ var cheerio = require('cheerio');
  *  3 - ctl01$mainContent$ctl00$carryPermissionsList$RadGrid1$ctl00$ctl03$ctl01$ctl09
  *  4 - ... меняется цифра в конце, начиная с 5, нечетные
  * @param htmlStr
- * @returns {{}}
+ * @returns {Object}
  */
 function parseHiddenFormData(htmlStr) {
     var hFormData = {},
@@ -39,6 +39,11 @@ function parseHiddenFormData(htmlStr) {
     return hFormData;
 }
 
+/**
+ * Парсим основные данные таблицы
+ * @param htmlStr
+ * @returns {Array}
+ */
 function parseData(htmlStr) {
     var result = [],
         $;
@@ -63,6 +68,11 @@ function parseData(htmlStr) {
     return result;
 }
 
+/**
+ * Парсим заголовки
+ * @param htmlStr
+ * @returns {Array}
+ */
 function parseHeaders(htmlStr) {
     var results = [],
         $;
